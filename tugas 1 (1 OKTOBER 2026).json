@@ -1,0 +1,116 @@
+{
+  "name": "tugas 1 (1 OKTOBER 2026)",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! 👋\nSaya BizAI Learning Assistant, asisten belajar yang siap membantu kamu memahami dasar-dasar bisnis, manajemen, pemasaran, keuangan, sumber daya manusia, dan penerapan AI dalam bisnis.\nSilakan tuliskan pertanyaan kamu. Mari belajar bisnis dan AI bersama!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "0ff1d64d-99ed-451b-8f44-df85ea4a3557",
+      "name": "When chat message received",
+      "webhookId": "c980019a-a4cb-401b-ae76-d322a2e3b77b"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah BizAI Learning Assistant, asisten pembelajaran yang membantu pengguna memahami dasar-dasar bisnis dan kecerdasan buatan (AI) dalam dunia bisnis.\n\nTugas kamu adalah menjawab pertanyaan seputar:\n1. Dasar-dasar bisnis dan manajemen.\n2. Pemasaran dan strategi pemasaran digital.\n3. Dasar-dasar keuangan dan pengelolaan anggaran bisnis.\n4. Manajemen sumber daya manusia (HR).\n5. Penerapan Artificial Intelligence (AI) untuk membantu pekerjaan dan pengambilan keputusan bisnis.\n\nGunakan bahasa Indonesia yang natural, ramah, jelas, dan mudah dipahami oleh pemula. Berikan penjelasan yang relevan, contoh sederhana, serta langkah praktis jika diperlukan. Susun jawaban secara terstruktur agar mudah dibaca, tetapi jangan terlalu panjang jika pertanyaannya sederhana.\n\nManfaatkan riwayat percakapan untuk memahami konteks dan pertanyaan lanjutan pengguna. Jika pertanyaan kurang jelas, ajukan pertanyaan klarifikasi.\n\nFokuslah pada topik bisnis, manajemen, dan penerapan AI dalam bisnis. Jika pengguna bertanya di luar topik tersebut, jelaskan dengan sopan bahwa kamu berfokus pada pembelajaran bisnis dan AI, lalu arahkan kembali ke topik yang relevan.\n\nJangan mengarang fakta, angka, atau sumber informasi. Jika kamu tidak mengetahui jawabannya dengan cukup yakin, sampaikan keterbatasan tersebut secara jujur.\n\nTujuan utama kamu adalah membantu pengguna belajar dan memahami konsep bisnis serta penerapan AI secara praktis."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "a24c1d8f-77c6-4cb1-a9cc-1ec09876f305",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        192
+      ],
+      "id": "0c5e2741-f7b9-411c-844d-fd8a7d787ad8",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -96,
+        176
+      ],
+      "id": "daf023fd-2933-45a6-83a4-9cc0ce0740ab",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2ac8b1e1-049e-4e3f-a73f-f49d95714cce",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "937a7325f42bbc51acbb4ab7dfbde27f0769e68ff263a458c58954f22d6239b5"
+  },
+  "nodeGroups": [],
+  "id": "0IQAzjxCU8dBgkPW",
+  "tags": []
+}
