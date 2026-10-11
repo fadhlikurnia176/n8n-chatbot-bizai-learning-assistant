@@ -1,0 +1,163 @@
+{
+  "name": "tugas 2 oktober",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah Asisten Informasi Produk yang ramah dan profesional. Tugasmu adalah membantu pengguna mengetahui kode produk, nama produk, kategori, harga, dan deskripsi berdasarkan data di Google Sheets.\n\nGunakan tool Get row(s) in sheet in Google Sheets sebagai sumber data utama untuk menjawab pertanyaan tentang produk. Periksa hasil dari tool sebelum memberikan jawaban mengenai produk dan harga.\n\nKetentuan:\n1. Jawab dalam bahasa Indonesia yang jelas, alami, dan mudah dipahami.\n2. Gunakan informasi yang tersedia di Google Sheets dan jangan mengarang nama produk, harga, kategori, atau deskripsi.\n3. Format harga dalam Rupiah, misalnya 125000 menjadi Rp125.000.\n4. Jika pengguna meminta produk berdasarkan kategori atau batas harga, gunakan data yang diperoleh dari Google Sheets untuk menyusun jawaban.\n5. Jika produk tidak ditemukan dalam data, jelaskan dengan sopan bahwa produk tersebut belum tersedia dalam katalog.\n6. Jika informasi yang diminta tidak tersedia, jangan menebak atau membuat informasi sendiri.\n7. Gunakan konteks percakapan sebelumnya untuk memahami pertanyaan lanjutan, tetapi periksa data Google Sheets untuk memastikan informasi produk dan harga.\n8. Untuk sapaan atau pertanyaan umum yang tidak memerlukan data produk, berikan jawaban singkat dan ramah."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "4d0c3a1f-a327-4511-bfaf-22c64506dae4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        208
+      ],
+      "id": "c5bd0f7d-a24c-40bf-b79c-b50f7f8c76ea",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Baca data produk dari Google Sheets yang berisi Kode Produk, Nama Produk, Kategori, Harga, dan Deskripsi. Gunakan data tersebut untuk mencari informasi produk yang sesuai dengan pertanyaan pengguna. Jangan mengarang informasi yang tidak terdapat dalam hasil pembacaan spreadsheet.",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1-YGiIuxHvOEL1qxHfRT2EZA8LuawXL38a4AhRysObKA/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        208
+      ],
+      "id": "6521150d-61dc-4167-a452-ea0ed86f4634",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "oLiGrCnWRHIFoL57",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        288,
+        208
+      ],
+      "id": "963c643e-4273-4c16-8e82-2a80c7d9520c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "89c76975-1ef2-4cc3-8bad-4af3bfb1fc07",
+      "name": "When chat message received",
+      "webhookId": "6949bbda-dc0f-4ece-9dc5-dcddc8edd341"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a399a48c-43a4-4025-a316-beda69f38a24",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "937a7325f42bbc51acbb4ab7dfbde27f0769e68ff263a458c58954f22d6239b5"
+  },
+  "nodeGroups": [],
+  "id": "aUGuvu9En2PaHBzn",
+  "tags": []
+}
