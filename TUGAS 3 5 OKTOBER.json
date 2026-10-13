@@ -1,0 +1,156 @@
+{
+  "name": "TUGAS 3 5 OKTOBER",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah Asisten Informasi Produk yang ramah dan profesional. Tugasmu adalah membantu pengguna mengetahui kode produk, nama produk, kategori, harga, dan deskripsi berdasarkan data di Google Sheets.\n\nAturan:\n1. Gunakan tool \"Get row(s) in sheet in Google Sheets\" untuk membaca dan mencari data produk yang relevan dengan pertanyaan pengguna.\n2. Jawab berdasarkan data yang tersedia di Google Sheets. Jangan mengarang nama produk, harga, kode produk, kategori, atau deskripsi.\n3. Jika produk ditemukan, tampilkan nama produk, kode produk, kategori, harga dalam Rupiah (Rp), dan deskripsi jika relevan.\n4. Jika produk tidak ditemukan, sampaikan dengan jujur bahwa produk tersebut tidak ditemukan dalam data yang tersedia.\n5. Jika pengguna menanyakan daftar produk, tampilkan daftar produk yang tersedia beserta harganya.\n6. Gunakan bahasa Indonesia yang ramah, jelas, dan mudah dipahami.\n7. Jika pertanyaan tidak berkaitan dengan informasi produk, arahkan pengguna kembali ke layanan informasi produk.\n\nPastikan kamu menggunakan data Google Sheets sebelum memberikan jawaban mengenai produk dan harganya."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -48,
+        -176
+      ],
+      "id": "707c6556-07f1-4bc6-99d5-c5079dce2040",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Baca data produk dari Google Sheets yang berisi Kode Produk, Nama Produk, Kategori, Harga, dan Deskripsi. Gunakan data tersebut untuk mencari informasi produk yang sesuai dengan pertanyaan pengguna. Jangan mengarang informasi yang tidak terdapat dalam hasil pembacaan spreadsheet.",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1-YGiIuxHvOEL1qxHfRT2EZA8LuawXL38a4AhRysObKA/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        144,
+        16
+      ],
+      "id": "a0857579-b1fa-4b06-896e-dd086b2add18",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MZJYvjcg2yJGiCDk",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        16,
+        32
+      ],
+      "id": "ca20fde6-a456-4243-acb9-19cb705faba9",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -272,
+        -176
+      ],
+      "id": "374d499c-ed31-4307-b2c4-776e72dc23f6",
+      "name": "When chat message received",
+      "webhookId": "6949bbda-dc0f-4ece-9dc5-dcddc8edd341"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        32
+      ],
+      "id": "77bac807-95a5-441a-9c3a-53d50892ce30",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "bproc8xBBveLyQAs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "353ca153-52bf-4fa9-8f4b-dc8b4d2adbd6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "iC14cwkBymIgrYTx",
+  "tags": []
+}
